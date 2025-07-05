@@ -1,24 +1,18 @@
 import cv2
 import os
 
-def extract_frames(video_path, output_path):
+def extract_frames(video_path, output_dir):
     cap = cv2.VideoCapture(video_path)
-    if not cap.isOpened():
-        print(f"Error opening file: {video_path}")
-        return
+    count = 0
 
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)
-
-    frame_id = 1
     while True:
         ret, frame = cap.read()
-        if ret:
-            frame_filename = os.path.join(output_path, f"{frame_id}.jpg")
-            cv2.imwrite(frame_filename, frame)
-            frame_id += 1
-        else:
+        if not ret:
             break
 
+        frame_path = os.path.join(output_dir, f"{count}.jpg")
+        cv2.imwrite(frame_path, frame)
+        count += 1
+
     cap.release()
-    print(f"Frames extracted to {output_path}")
+    print(f"Frames extracted to {output_dir}")
